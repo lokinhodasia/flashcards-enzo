@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards-enzo</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #7d0808;
+            margin: 0;
+            padding: 20px;
+        }
+        .flashcard-container {
+            perspective: 1000px;
+            width: 300px;
+            height: 200px;
+        }
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+        .flashcard-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            border-radius: 10px;
+            font-size: 18px;
+        }
+        .front {
+            background: rgb(71, 149, 111);
+            color: #333;
+        }
+        .back {
+            background: #4a6fa5;
+            color: rgb(106, 29, 174);
+            transform: rotateY(180deg);
+        }
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 8px 16px;
+            border: none;
+            background: #4a6fa5;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="counter">1/5</div>
+    <div class="flashcard-container">
+        <div class="flashcard" onclick="flipCard()">
+            <div class="flashcard-face front">
+                Qual é a capital do Brasil?
+            </div>
+            <div class="flashcard-face back">
+                Brasília
+            </div>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button onclick="prevCard()">Anterior</button>
+        <button onclick="nextCard()">Próxima</button>
+    </div>
+
+    <script>
+        const cards = [
+            { question: "Qual é a capital do Brasil?", answer: "Brasília" },
+            { question: "Quantos planetas existem no sistema solar?", answer: "8" },
+            { question: "Quem pintou a Mona Lisa?", answer: "Leonardo da Vinci" },
+            { question: "Qual é o maior oceano da Terra?", answer: "Oceano Pacífico" },
+            { question: "Em que ano começou a Segunda Guerra Mundial?", answer: "1939" }
+        ];
+        
+        let currentCard = 0;
+        const flashcard = document.querySelector('.flashcard');
+        const counter = document.querySelector('.counter');
+        
+        function updateCard() {
+            document.querySelector('.front').textContent = cards[currentCard].question;
+            document.querySelector('.back').textContent = cards[currentCard].answer;
+            counter.textContent = `${currentCard + 1}/${cards.length}`;
+            if (flashcard.classList.contains('flipped')) {
+                flashcard.classList.remove('flipped');
+            }
+        }
+        
+        function flipCard() {
+            flashcard.classList.toggle('flipped');
+        }
+        
+        function nextCard() {
+            if (currentCard < cards.length - 1) {
+                currentCard++;
+                updateCard();
+            }
+        }
+        
+        function prevCard() {
+            if (currentCard > 0) {
+                currentCard--;
+                updateCard();
+            }
+        }
+        
+        // Inicializa o primeiro card
+        updateCard();
+    </script>
+</body>
+</html>
